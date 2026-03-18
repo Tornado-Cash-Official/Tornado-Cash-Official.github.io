@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+
+  <title>Tornado Cash — Crypto Mixer, OFAC Sanctions, AML Risk &amp; Compliance Guide (2026)</title>
+  <meta name="description" content="Tornado Cash guide (2026): what Tornado Cash is, how the Ethereum mixer works, OFAC sanctions explained, why wallets with Tornado Cash exposure are flagged in AML screening, compliance responses, legal context, and what to do if your address is flagged.">
+  <meta name="author" content="Crypto Finance Experts">
+  <link rel="canonical" href="https://tornado-cash-aml.example.com/">
+  <link rel="icon" type="image/png" href="Tornado.jpg">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tornado-cash-aml.example.com/">
+  <meta property="og:title" content="Tornado Cash — Crypto Mixer, OFAC Sanctions &amp; AML Compliance Guide (2026)">
+  <meta property="og:description" content="Tornado Cash explained: how the Ethereum mixer works, OFAC sanctions, AML risk scoring, compliance responses, and handling flagged wallets.">
+  <meta property="og:image" content="cover.png">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Tornado Cash — Ethereum Mixer, OFAC Sanctions &amp; AML Risk (2026)">
+  <meta property="twitter:description" content="Tornado Cash: Ethereum mixer mechanics, OFAC sanction timeline, AML risk, compliance screening, and flagged wallet guidance.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Tornado Cash — Crypto Mixer, OFAC Sanctions, AML Risk & Compliance Guide (2026)",
+    "description": "Tornado Cash explained: Ethereum mixer mechanics, OFAC sanctions, AML risk scoring, compliance responses, and handling flagged wallets.",
+    "author": { "@type": "Organization", "name": "Crypto Finance Experts", "url": "https://tornado-cash-aml.example.com/" },
+    "publisher": { "@type": "Organization", "name": "Crypto Finance Experts" },
+    "datePublished": "2026-03-18",
+    "dateModified": "2026-03-18",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://tornado-cash-aml.example.com/" }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://tornado-cash-aml.example.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Compliance Guides", "item": "https://tornado-cash-aml.example.com/guides/" },
+      { "@type": "ListItem", "position": 3, "name": "Tornado Cash", "item": "https://tornado-cash-aml.example.com/tornado-cash/" }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Tornado Cash?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Tornado Cash is a decentralised, non-custodial cryptocurrency mixing protocol deployed on Ethereum and several EVM-compatible chains. It uses smart contracts and zero-knowledge proofs (zk-SNARKs) to break the on-chain link between deposit and withdrawal addresses. Users deposit a fixed denomination of ETH or ERC-20 tokens and receive a cryptographic note; they can later redeem that note to withdraw the same amount to a different address with no on-chain connection to the deposit. In August 2022, OFAC added Tornado Cash's smart contract addresses to the SDN list, making interaction with the protocol a potential US sanctions violation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Tornado Cash illegal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Tornado Cash itself is a decentralised protocol — the smart contracts are deployed on-chain and cannot be shut down. Using Tornado Cash is not universally illegal. For US persons and entities with US nexus, interacting with the sanctioned smart contract addresses after August 8, 2022 may constitute a sanctions violation under OFAC's SDN list designation, regardless of intent. Outside the US, legality depends on local sanctions legislation and AML obligations. In all jurisdictions, using Tornado Cash to launder criminal proceeds is illegal under money laundering statutes."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      /* Tornado Cash Dark Green Brand */
+      --primary: #065F46;
+      --primary-600: #064E3B;
+      --primary-700: #022C22;
+      --accent: #34D399;
+      --accent-soft: #A7F3D0;
+      --accent-bright: #6EE7B7;
+
+      --ink: #ECFDF5;
+      --muted: #A1A1AA;
+      --muted-2: #6B7280;
+
+      --bg: #010A05;
+      --panel: #021409;
+      --panel-2: #031C0D;
+      --line: rgba(52,211,153,.14);
+      --line-soft: rgba(255,255,255,.08);
+
+      --ok: #10B981;
+      --warn: #F59E0B;
+      --error: #EF4444;
+
+      --shadow: 0 18px 44px rgba(0,0,0,.70);
+      --radius: 14px;
+      --radius-lg: 22px;
+      --gap: 1.25rem;
+      --gap-lg: 2rem;
+    }
+
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      color: var(--muted);
+      background:
+        radial-gradient(1000px 600px at 8%  0%,  rgba(6,95,70,.28),  transparent 58%),
+        radial-gradient(800px  500px at 92% 8%,  rgba(52,211,153,.07), transparent 55%),
+        radial-gradient(900px  600px at 50% 92%, rgba(4,78,55,.20),   transparent 60%),
+        linear-gradient(180deg, #010702 0%, #010A05 50%, #010702 100%);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration: none }
+    a:hover { text-decoration: underline }
+    img { max-width: 100%; height: auto; display: block }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.25rem }
+
+    h1,h2,h3,h4 { color: var(--ink); line-height: 1.25; margin: 0 0 .6rem }
+    h1 { font-size: clamp(2rem,4.5vw,3.2rem); font-weight: 950; letter-spacing: .2px }
+    h2 {
+      font-size: clamp(1.35rem,2.8vw,2rem);
+      margin-top: 2.2rem; padding-top: .6rem;
+      border-top: 1px solid var(--line);
+    }
+    h3 { font-size: clamp(1.05rem,2.2vw,1.3rem); color: var(--accent-soft) }
+    p, li, td, th { font-size: 1rem }
+    .lead { font-size: 1.125rem; color: #D1FAE5 }
+    .muted { color: var(--muted) }
+    .muted-2 { color: var(--muted-2) }
+
+    /* Breadcrumb */
+    .breadcrumb { padding: .7rem 0; font-size: .85rem; color: var(--muted-2) }
+    .breadcrumb a { color: var(--muted); font-weight: 600 }
+    .breadcrumb a:hover { color: var(--accent) }
+    .breadcrumb span { margin: 0 .4rem; opacity: .4 }
+
+    /* Meta bar */
+    .meta-bar {
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap; margin-bottom: .75rem;
+      font-size: .83rem; color: var(--muted-2);
+    }
+    .meta-bar time { font-weight: 700; color: var(--accent-soft) }
+
+    /* Hero */
+    header.hero {
+      padding: clamp(2rem,6vw,4rem) 0;
+      background:
+        radial-gradient(700px 420px at 18% 10%, rgba(6,95,70,.30), transparent 60%),
+        radial-gradient(700px 420px at 90% 20%, rgba(52,211,153,.08), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.025), transparent 55%);
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-grid { display: grid; gap: var(--gap-lg); grid-template-columns: 1fr }
+    .hero-card {
+      background: linear-gradient(160deg, rgba(3,28,13,.92), rgba(2,20,9,.78));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: clamp(1rem,3vw,1.85rem);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-row { display: flex; align-items: center; gap: .9rem; margin-bottom: .75rem }
+    .brand-logo {
+      width: 54px; height: 54px;
+      border-radius: 14px;
+      border: 1px solid rgba(52,211,153,.22);
+      background: rgba(6,95,70,.15);
+      padding: .35rem; object-fit: contain;
+      box-shadow: 0 10px 22px rgba(0,0,0,.50), 0 0 0 1px rgba(52,211,153,.08);
+      flex: 0 0 auto;
+    }
+
+    /* CTA */
+    .cta-wrap { display: flex; justify-content: center; margin-top: 1.6rem }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #059669 0%, #065F46 55%, #047857 100%);
+      color: #ECFDF5;
+      padding: 1.1rem 3.2rem;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 1.18rem;
+      letter-spacing: .5px;
+      box-shadow:
+        0 0 0 1px rgba(52,211,153,.30),
+        0 8px 26px rgba(6,95,70,.55),
+        0 22px 52px rgba(6,95,70,.24);
+      border: 1px solid rgba(52,211,153,.22);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .cta:hover {
+      transform: translateY(-3px) scale(1.025);
+      box-shadow:
+        0 0 0 2px rgba(52,211,153,.50),
+        0 12px 34px rgba(6,95,70,.65),
+        0 30px 62px rgba(6,95,70,.30);
+      filter: brightness(1.12);
+      text-decoration: none;
+      color: #ECFDF5;
+    }
+
+    /* Note */
+    .note {
+      border-left: 3px solid var(--accent);
+      padding: .8rem 1rem;
+      background: rgba(52,211,153,.07);
+      border-radius: 10px;
+      color: #D1FAE5;
+    }
+    .note.warn {
+      border-left-color: var(--warn);
+      background: rgba(245,158,11,.07);
+      color: #FEF3C7;
+    }
+    .note.err {
+      border-left-color: var(--error);
+      background: rgba(239,68,68,.07);
+      color: #FEE2E2;
+    }
+
+    /* Steps */
+    section.step-guide { padding: clamp(2rem,6vw,3.5rem) 0 }
+    .steps { display: grid; gap: var(--gap); grid-template-columns: 1fr }
+    .step {
+      background: linear-gradient(180deg, rgba(3,28,13,.84), rgba(2,20,9,.68));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      box-shadow: 0 12px 26px rgba(0,0,0,.55);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .step:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px rgba(0,0,0,.65);
+      border-color: rgba(52,211,153,.28);
+    }
+    .step .icon {
+      width: 54px; height: 54px; border-radius: 50%;
+      display: inline-grid; place-items: center;
+      background: rgba(6,95,70,.26);
+      margin-bottom: .6rem; color: var(--accent-soft);
+      font-weight: 950;
+      border: 1px solid rgba(52,211,153,.18);
+    }
+
+    /* Cards */
+    main .card {
+      background: linear-gradient(175deg, rgba(3,28,13,.76), rgba(2,20,9,.62));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+      box-shadow: 0 12px 28px rgba(0,0,0,.55);
+    }
+
+    .grid-2 { display: grid; gap: var(--gap); grid-template-columns: 1fr }
+    .pillbar { display: flex; flex-wrap: wrap; gap: .6rem; margin: .75rem 0 0 }
+    .pill {
+      border: 1px solid rgba(52,211,153,.20);
+      background: rgba(6,95,70,.12);
+      padding: .4rem .65rem; border-radius: 999px;
+      font-weight: 800; color: #A7F3D0;
+    }
+
+    /* TOC */
+    .toc {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(6,95,70,.10), rgba(255,255,255,.02));
+      border-radius: var(--radius); padding: 1rem;
+    }
+    .toc strong { color: var(--ink) }
+    .toc ul { margin: .5rem 0 0; padding-left: 1.1rem }
+    .toc li { margin: .25rem 0 }
+    .toc a { font-weight: 800; color: var(--accent) }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 12px }
+    th, td { padding: .9rem; border-bottom: 1px solid var(--line-soft) }
+    th { background: rgba(6,95,70,.14); color: var(--ink); text-align: left }
+    tr.highlight { background: rgba(6,95,70,.08) }
+    tr:hover { background: rgba(255,255,255,.02) }
+
+    .ok { color: var(--ok) } .warn { color: var(--warn) } .err { color: var(--error) }
+
+    /* EEAT */
+    .eeat {
+      background: linear-gradient(180deg, rgba(6,95,70,.10), rgba(255,255,255,.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 1.25rem;
+      box-shadow: 0 12px 28px rgba(0,0,0,.55);
+    }
+
+    /* FAQ */
+    .faq-item { border-bottom: 1px solid var(--line-soft); padding: .9rem 0 }
+    .faq-button {
+      all: unset; display: flex; justify-content: space-between; align-items: center;
+      width: 100%; cursor: pointer; padding: .3rem 0;
+    }
+    .faq-button:focus-visible { outline: 2px solid var(--accent) }
+    .faq-button h3 { margin: 0; font-weight: 950 }
+    .faq-content { max-height: 0; overflow: hidden; transition: max-height .28s ease }
+    .faq-content.open { padding-top: .6rem }
+    .faq-plus { font-weight: 950; color: var(--accent); font-size: 1.1rem; flex-shrink: 0; margin-left: .75rem }
+
+    /* Callout grid */
+    .callout-grid { display: grid; gap: var(--gap); grid-template-columns: 1fr; margin-top: .75rem }
+    .mini {
+      background: rgba(6,95,70,.06);
+      border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 1rem;
+    }
+    .mini h3 { margin-bottom: .35rem }
+    .kpi-badges { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .5rem }
+    .kpi-badges span {
+      border: 1px solid rgba(6,95,70,.30);
+      background: rgba(6,95,70,.14);
+      color: var(--accent-soft);
+      padding: .3rem .55rem; border-radius: 999px;
+      font-weight: 900; font-size: .9rem;
+    }
+
+    /* Stats */
+    .stat-block { display: flex; flex-wrap: wrap; gap: var(--gap); margin: 1rem 0 }
+    .stat {
+      flex: 1; min-width: 140px;
+      background: rgba(6,95,70,.10);
+      border: 1px solid rgba(52,211,153,.18);
+      border-radius: var(--radius);
+      padding: .9rem 1rem; text-align: center;
+    }
+    .stat-num { display: block; font-size: 1.75rem; font-weight: 950; color: var(--accent); line-height: 1.1 }
+    .stat-lbl { font-size: .82rem; color: var(--muted); margin-top: .25rem }
+
+    /* Risk bars */
+    .risk-row { display: flex; align-items: center; gap: .75rem; margin: .4rem 0 }
+    .risk-lbl { min-width: 95px; font-size: .85rem; font-weight: 700; color: var(--accent-soft) }
+    .risk-track { flex: 1; height: 6px; background: rgba(255,255,255,.08); border-radius: 99px; overflow: hidden }
+    .risk-fill { height: 100%; border-radius: 99px }
+    .risk-fill.low  { background: linear-gradient(90deg,#065F46,#10B981); width: 22% }
+    .risk-fill.med  { background: linear-gradient(90deg,#B45309,#F59E0B); width: 55% }
+    .risk-fill.high { background: linear-gradient(90deg,#7F1D1D,#EF4444); width: 90% }
+    .risk-fill.crit { background: linear-gradient(90deg,#450A0A,#DC2626); width: 100% }
+    .risk-val { min-width: 60px; text-align: right; font-size: .82rem; font-weight: 800 }
+
+    /* Timeline */
+    .timeline { margin: 1rem 0; border-left: 2px solid rgba(52,211,153,.25); padding-left: 1.25rem }
+    .tl-item { position: relative; margin-bottom: 1rem }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -1.44rem; top: .35rem;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+    }
+    .tl-date { font-size: .8rem; font-weight: 800; color: var(--accent); letter-spacing: .3px }
+    .tl-text { font-size: .95rem; color: var(--muted); margin-top: .15rem }
+
+    @media (min-width: 860px) {
+      .steps { grid-template-columns: repeat(4,1fr) }
+      .grid-2 { grid-template-columns: 1fr 1fr }
+      .callout-grid { grid-template-columns: 1fr 1fr }
+    }
+  </style>
+</head>
+<body>
+
+<header class="hero" role="banner">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>›</span>
+      <a href="/guides/">Compliance Guides</a><span>›</span>
+      <span aria-current="page">Tornado Cash</span>
+    </nav>
+
+    <div class="hero-grid">
+      <div class="hero-card" aria-label="Intro">
+        <div class="meta-bar">
+          <span>By <strong>Crypto Finance Experts</strong></span>
+          <span>·</span>
+          <time datetime="2026-03-18">March 18, 2026</time>
+          <span>·</span>
+          <span>9 min read</span>
+        </div>
+
+        <div class="brand-row">
+          <img class="brand-logo"
+               src="Tornado.jpg"
+               alt="Tornado Cash compliance reference"
+               width="54" height="54">
+          <div>
+            <div class="muted" style="font-weight:900;letter-spacing:.2px;">Compliance &amp; AML Guide</div>
+            <div class="muted-2" style="font-size:.95rem;">Ethereum Mixer&nbsp;•&nbsp;zk-SNARKs&nbsp;•&nbsp;OFAC SDN&nbsp;•&nbsp;AML Screening</div>
+          </div>
+        </div>
+
+        <h1>Tornado Cash: Ethereum Mixer, OFAC Sanctions &amp; AML Compliance Guide (2026)</h1>
+        <p class="lead">
+          A practical compliance guide to Tornado Cash — the decentralised Ethereum mixing protocol
+          sanctioned by OFAC in 2022. What it is, how zero-knowledge proofs power it,
+          why wallets with Tornado Cash exposure are flagged in every major AML screening tool,
+          what the OFAC designation means for VASPs and users, and how to respond
+          when an address is flagged.
+        </p>
+
+        <div class="cta-wrap">
+          <a href="https://en.wikipedia.org/wiki/Cryptocurrency_tumbler"
+             class="cta" target="_blank" rel="noopener" aria-label="Tornado Cash">
+            Tornado Cash
+          </a>
+        </div>
+
+        <div class="note err" style="margin-top:1.25rem;">
+          <strong>⚠ OFAC Notice:</strong> Tornado Cash smart contract addresses were added to the
+          OFAC Specially Designated Nationals (SDN) list on August 8, 2022. For US persons and
+          entities with US nexus, interacting with these addresses after that date may constitute
+          a sanctions violation regardless of intent. Consult a cryptocurrency compliance attorney
+          before any interaction with sanctioned addresses.
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="step-guide" aria-labelledby="workflow-title">
+  <div class="container">
+    <h2 id="workflow-title">Tornado Cash Compliance Workflow: Identify → Classify → Respond → Document</h2>
+    <div class="steps" role="list">
+      <article class="step" role="listitem">
+        <div class="icon">①</div>
+        <h3>Identify Tornado Cash exposure</h3>
+        <p>Blockchain analytics tools flag wallets that have interacted with Tornado Cash smart contract addresses. The flag specifies hop distance, volume, and whether the interaction is pre- or post-OFAC designation (August 8, 2022).</p>
+      </article>
+      <article class="step" role="listitem">
+        <div class="icon">②</div>
+        <h3>Classify: OFAC or non-sanctioned</h3>
+        <p>Post-August 2022 interaction with sanctioned addresses requires zero-discretion blocking for US-nexus VASPs. Pre-designation exposure is treated as standard high-risk mixer exposure — requiring EDD but not automatic blocking for non-US entities.</p>
+      </article>
+      <article class="step" role="listitem">
+        <div class="icon">③</div>
+        <h3>Apply the correct compliance response</h3>
+        <p>OFAC exposure: block and report. Non-OFAC mixer exposure: tiered response by hop distance and volume. Request source-of-funds documentation. Route to analyst review. File SAR if criminal proceeds are suspected after review.</p>
+      </article>
+      <article class="step" role="listitem">
+        <div class="icon">④</div>
+        <h3>Document every decision</h3>
+        <p>Record the exposure type, hop distance, policy rule applied, action taken, and analyst rationale. For OFAC-related decisions, retain documentation indefinitely. This audit trail is what regulators and legal counsel require.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<main class="container" role="main">
+<article>
+
+  <section class="card toc" aria-label="Table of Contents">
+    <strong>On this page (Tornado Cash):</strong>
+    <ul>
+      <li><a href="#overview">What Tornado Cash is and how it works</a></li>
+      <li><a href="#zk">Tornado Cash zero-knowledge proof mechanics</a></li>
+      <li><a href="#timeline">Tornado Cash OFAC sanction timeline</a></li>
+      <li><a href="#stats">Tornado Cash by the numbers</a></li>
+      <li><a href="#aml-risk">Tornado Cash AML risk in screening tools</a></li>
+      <li><a href="#vasp">How VASPs must respond to Tornado Cash exposure</a></li>
+      <li><a href="#user">What to do if your wallet is flagged for Tornado Cash use</a></li>
+      <li><a href="#tools">Analytics tools detecting Tornado Cash interactions</a></li>
+      <li><a href="#legal">Tornado Cash legal cases and regulatory context</a></li>
+      <li><a href="#best-practices">Best practices for compliance teams</a></li>
+      <li><a href="#troubleshooting">Troubleshooting Tornado Cash AML flag disputes</a></li>
+      <li><a href="#eeat">Sources &amp; references</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </section>
+
+  <section class="card" id="overview">
+    <h2>What Tornado Cash Is and How It Works</h2>
+    <p>
+      Tornado Cash is a decentralised, non-custodial cryptocurrency mixing protocol
+      originally deployed on Ethereum in 2019. It allows users to deposit fixed-denomination
+      amounts of ETH or ERC-20 tokens and withdraw the same amount to a different address,
+      with no on-chain link between deposit and withdrawal addresses.
+      A full technical overview is at
+      <a href="https://en.wikipedia.org/wiki/Cryptocurrency_tumbler" target="_blank" rel="noopener nofollow">Wikipedia — Cryptocurrency Tumbler</a>.
+    </p>
+
+    <div class="pillbar">
+      <span class="pill">Ethereum Mixer</span>
+      <span class="pill">zk-SNARKs</span>
+      <span class="pill">OFAC SDN</span>
+      <span class="pill">AML High-Risk</span>
+      <span class="pill">Non-Custodial</span>
+    </div>
+
+    <div class="callout-grid">
+      <div class="mini">
+        <h3>How the protocol breaks the transaction link</h3>
+        <p class="muted">Users deposit a fixed amount (0.1, 1, 10, or 100 ETH) into a Tornado Cash smart contract pool. The contract issues a cryptographic "note" — a secret that proves the deposit without revealing the depositor's address. To withdraw, the user submits the note to a different address via a zk-SNARK proof that confirms ownership of the note without exposing which deposit it corresponds to. The withdrawal address has no on-chain connection to the deposit address.</p>
+        <div class="kpi-badges"><span>Fixed denominations</span><span>Cryptographic note</span><span>zk-SNARK withdrawal proof</span></div>
+      </div>
+      <div class="mini">
+        <h3>Chains where Tornado Cash operated</h3>
+        <p class="muted">Tornado Cash was deployed on Ethereum mainnet (primary), BNB Chain, Polygon, Arbitrum, Optimism, and Gnosis Chain. The OFAC sanction covers the smart contract addresses across all chains where they are deployed — not just Ethereum mainnet. When screening for Tornado Cash exposure, ensure your analytics tool covers all relevant EVM chains.</p>
+        <div class="kpi-badges"><span>Ethereum (primary)</span><span>BNB, Polygon</span><span>Arbitrum, Optimism</span></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Decentralisation and enforcement:</strong> Unlike centralised mixers, Tornado Cash has no operator that can be seized or shut down — the smart contracts remain deployed on-chain. The OFAC sanction targets the contract addresses themselves, not a company or individual. This creates a legally novel situation: interacting with immutable code is treated as a sanctions violation.
+    </div>
+  </section>
+
+  <section class="card" id="zk">
+    <h2>Tornado Cash Zero-Knowledge Proof Mechanics</h2>
+    <p>
+      The cryptographic innovation that makes Tornado Cash more privacy-preserving than
+      traditional coin mixers is its use of zk-SNARKs (Zero-Knowledge Succinct
+      Non-Interactive Arguments of Knowledge).
+    </p>
+    <div class="callout-grid">
+      <div class="mini">
+        <h3>What zk-SNARKs prove</h3>
+        <p class="muted">A zk-SNARK allows the withdrawer to prove to the smart contract that they possess a valid deposit note — without revealing <em>which</em> deposit note it is. The contract verifies the proof mathematically without learning anything about the depositor's identity or address. This is cryptographically stronger than traditional mixing, which relies on the mixer operator's honesty not to log the input-output mapping.</p>
+        <div class="kpi-badges"><span>Proof without disclosure</span><span>Mathematically verifiable</span><span>No operator trust</span></div>
+      </div>
+      <div class="mini">
+        <h3>Why this matters for AML detection</h3>
+        <p class="muted">Because the on-chain link between deposit and withdrawal addresses is cryptographically broken — not just obscured — standard transaction graph analysis cannot follow funds through Tornado Cash the way it can through traditional mixers. Analytics tools instead flag any interaction with the known Tornado Cash contract addresses directly. The deposit address is visible; the withdrawal destination is not.</p>
+        <div class="kpi-badges"><span>Graph analysis defeated</span><span>Contract address flagged</span><span>Withdrawal unattributable</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="timeline">
+    <h2>Tornado Cash OFAC Sanction Timeline</h2>
+
+    <div class="timeline" aria-label="Tornado Cash key events">
+      <div class="tl-item">
+        <div class="tl-date">2019</div>
+        <div class="tl-text">Tornado Cash protocol deployed on Ethereum mainnet by Roman Storm, Roman Semenov, and Alexey Pertsev.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">March 2022</div>
+        <div class="tl-text">Lazarus Group (North Korean state-sponsored hackers) uses Tornado Cash to launder approximately $455M stolen from Axie Infinity's Ronin Bridge.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">August 8, 2022</div>
+        <div class="tl-text"><strong>OFAC adds Tornado Cash smart contract addresses to the SDN list.</strong> All interactions with the sanctioned addresses become potential US sanctions violations for US persons and US-nexus entities. See <a href="https://ofac.treasury.gov/sanctions-programs-and-country-information" target="_blank" rel="noopener nofollow">ofac.treasury.gov</a>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">August 2022</div>
+        <div class="tl-text">Alexey Pertsev arrested in the Netherlands. GitHub repositories, the Tornado Cash website, and associated IPFS content deplatformed. Circle blacklists USDC in Tornado Cash contracts.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">August 2023</div>
+        <div class="tl-text">Roman Storm and Roman Semenov indicted in the US on money laundering and sanctions conspiracy charges. FinCEN designates Tornado Cash as a "primary money laundering concern."</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">May 2024</div>
+        <div class="tl-text">5th Circuit Court of Appeals rules that immutable smart contracts cannot be sanctioned under IEEPA — a significant legal challenge to the OFAC designation. The legal status of the sanction remains under active litigation. VASPs should continue to treat interactions as high-risk pending final resolution.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025–2026</div>
+        <div class="tl-text">Legal proceedings continue. Tornado Cash protocol remains deployed on-chain and accessible. AML screening tools continue to flag all Tornado Cash interactions as high-risk regardless of litigation outcome.</div>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <strong>Legal status as of March 2026:</strong> The OFAC designation of Tornado Cash is under active legal challenge. However, until a final court ruling removes addresses from the SDN list, US-nexus VASPs must continue to treat Tornado Cash interactions as potentially sanctionable. Consult legal counsel for current guidance specific to your jurisdiction and business.
+    </div>
+  </section>
+
+  <section class="card" id="stats">
+    <h2>Tornado Cash by the Numbers</h2>
+
+    <div class="stat-block" aria-label="Key Tornado Cash statistics">
+      <div class="stat">
+        <span class="stat-num">$7.6B</span>
+        <div class="stat-lbl">Total value processed by Tornado Cash<br><small>2019–2022, on-chain data</small></div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">$455M</span>
+        <div class="stat-lbl">Ronin Bridge hack laundered via Tornado Cash<br><small>Lazarus Group, March 2022</small></div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">34%</span>
+        <div class="stat-lbl">Of Tornado Cash volume attributed to illicit sources<br><small>Chainalysis pre-sanction analysis</small></div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">Aug 2022</span>
+        <div class="stat-lbl">OFAC SDN designation date<br><small>All interactions after this date at risk</small></div>
+      </div>
+    </div>
+
+    <div class="note">
+      The 34% illicit attribution is significant — but it also means the majority of Tornado Cash volume came from users with legitimate privacy motivations. This is why the OFAC sanction was legally contested: it treats all users of a protocol the same regardless of their underlying purpose. Source: <a href="https://www.chainalysis.com/reports/crypto-crime-report/" target="_blank" rel="noopener nofollow">Chainalysis</a>.
+    </div>
+  </section>
+
+  <section class="card" id="aml-risk">
+    <h2>Tornado Cash AML Risk in Screening Tools</h2>
+
+    <div style="margin:.75rem 0">
+      <div class="risk-row">
+        <span class="risk-lbl">Pre-Aug 2022, indirect</span>
+        <div class="risk-track"><div class="risk-fill med"></div></div>
+        <span class="risk-val warn">Medium</span>
+      </div>
+      <div class="risk-row">
+        <span class="risk-lbl">Pre-Aug 2022, direct</span>
+        <div class="risk-track"><div class="risk-fill high"></div></div>
+        <span class="risk-val err">High</span>
+      </div>
+      <div class="risk-row">
+        <span class="risk-lbl">Post-Aug 2022, any hop</span>
+        <div class="risk-track"><div class="risk-fill crit"></div></div>
+        <span class="risk-val err">Critical / OFAC</span>
+      </div>
+    </div>
+
+    <table aria-label="Tornado Cash AML screening risk by exposure type">
+      <thead>
+        <tr><th>Exposure type</th><th>Score</th><th>OFAC layer</th><th>Compliance response</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight">
+          <td><strong>Post-Aug 2022 direct interaction</strong></td>
+          <td class="err">Critical</td>
+          <td class="err">Yes — SDN violation risk</td>
+          <td>Immediate block; legal counsel; no discretion for US-nexus VASPs</td>
+        </tr>
+        <tr>
+          <td><strong>Post-Aug 2022 indirect (2 hops)</strong></td>
+          <td class="err">High</td>
+          <td class="warn">Possible OFAC nexus</td>
+          <td>Block; analyst review; legal counsel assessment</td>
+        </tr>
+        <tr class="highlight">
+          <td><strong>Pre-Aug 2022 direct interaction</strong></td>
+          <td class="err">High</td>
+          <td class="ok">No OFAC designation</td>
+          <td>EDD; source-of-funds documentation; possible SAR</td>
+        </tr>
+        <tr>
+          <td><strong>Pre-Aug 2022 indirect (2–3 hops)</strong></td>
+          <td class="warn">Medium</td>
+          <td class="ok">No OFAC designation</td>
+          <td>Analyst review; source-of-funds request; document and decide</td>
+        </tr>
+        <tr class="highlight">
+          <td><strong>Distant indirect (3+ hops, any date)</strong></td>
+          <td class="warn">Low–Medium</td>
+          <td class="ok">No OFAC designation</td>
+          <td>Document; monitor; typically allow with enhanced oversight</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note err">
+      <strong>OFAC is a separate obligation from AML scoring:</strong> The OFAC SDN designation is a sanctions law obligation — it applies regardless of risk score, hop distance, or any EDD outcome. Do not treat Tornado Cash OFAC exposure as an AML risk scoring question. It is a legal compliance requirement with strict liability characteristics.
+    </div>
+  </section>
+
+  <section class="card" id="vasp">
+    <h2>How VASPs Must Respond to Tornado Cash Exposure</h2>
+
+    <div class="callout-grid">
+      <div class="mini">
+        <h3>US-nexus VASPs: zero discretion on post-Aug 2022 exposure</h3>
+        <p class="muted">US-registered exchanges, custodians, and any entity with US nexus (US customers, US bank accounts, US management) must block all transactions involving addresses with post-August 8, 2022 Tornado Cash exposure. There is no EDD path that resolves an OFAC SDN match — the obligation is blocking and reporting, not enhanced scrutiny. File a report with OFAC's Compliance Hotline and retain all documentation. See <a href="https://ofac.treasury.gov/sanctions-programs-and-country-information" target="_blank" rel="noopener nofollow">ofac.treasury.gov</a>.</p>
+        <div class="kpi-badges"><span>Block immediately</span><span>Report to OFAC</span><span>Retain documentation</span></div>
+      </div>
+      <div class="mini">
+        <h3>Non-US VASPs: risk-based approach</h3>
+        <p class="muted">Non-US VASPs without US nexus are not directly bound by OFAC but must check their own jurisdiction's sanctions lists (EU consolidated list, UK OFSI, UN Security Council). Most EU and UK regulators treat Tornado Cash interactions as a high-risk AML indicator requiring EDD regardless of whether a local sanctions designation exists. Apply the hop-distance risk matrix and document thoroughly. <a href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Guidance-RBA-virtual-assets-2021.html" target="_blank" rel="noopener nofollow">FATF guidance</a> applies to all.</p>
+        <div class="kpi-badges"><span>Check local sanctions</span><span>Risk-based EDD</span><span>FATF framework</span></div>
+      </div>
+    </div>
+
+    <div class="callout-grid" style="margin-top:.75rem">
+      <div class="mini">
+        <h3>SAR filing obligations</h3>
+        <p class="muted">Blocking a transaction for Tornado Cash exposure does not automatically trigger a SAR obligation — SAR filing is required when you suspect criminal proceeds, not merely AML-flag exposure. However, any Tornado Cash interaction involving large sums, structuring patterns, or other red flags beyond the mixer exposure itself typically crosses the SAR threshold. File with FinCEN at <a href="https://bsaefiling.fincen.treas.gov/" target="_blank" rel="noopener nofollow">bsaefiling.fincen.treas.gov</a>.</p>
+        <div class="kpi-badges"><span>Separate from block</span><span>Criminal suspicion threshold</span><span>Do not tip off</span></div>
+      </div>
+      <div class="mini">
+        <h3>Documentation requirements</h3>
+        <p class="muted">For every Tornado Cash-related compliance decision: retain the screening report with timestamp, the category breakdown and hop distances, the policy rule applied, the action taken, any SAR filing reference, and the analyst's rationale if a review queue was triggered. For OFAC-related blocks, retain documentation indefinitely — there is no statute of limitations ceiling on sanctions record retention obligations.</p>
+        <div class="kpi-badges"><span>Full screening report</span><span>Policy citation</span><span>Retain indefinitely</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="user">
+    <h2>What to Do if Your Wallet Is Flagged for Tornado Cash Use</h2>
+    <ul>
+      <li><strong>Determine whether the exposure is pre- or post-OFAC designation.</strong> Request the specific interaction date from the platform. Pre-August 8, 2022 interactions are not OFAC sanctions violations — they are high-risk AML exposure requiring EDD. This distinction significantly affects your resolution options.</li>
+      <li><strong>Gather source-of-funds documentation.</strong> Evidence of where the funds came from <em>before</em> they entered Tornado Cash is the most effective documentation. Exchange withdrawal records, bank statements, payroll records, or OTC desk receipts establish legitimate fund origin.</li>
+      <li><strong>Do not attempt to re-mix or "clean" the funds.</strong> Using additional mixing services deepens the AML exposure and adds new flags to your transaction history. The on-chain record is permanent.</li>
+      <li><strong>For post-Aug 2022 OFAC exposure at a US-nexus platform:</strong> US-nexus VASPs have no legal discretion to release funds. This is not a dispute that documentation resolves — it is a legal compliance requirement. Consult a cryptocurrency compliance attorney experienced in OFAC matters before taking any further action.</li>
+      <li><strong>For pre-Aug 2022 or non-OFAC exposure:</strong> submit a formal dispute with source-of-funds documentation to the platform's compliance team. Most exchanges clear documented legitimate cases within 5–10 business days.</li>
+    </ul>
+
+    <div class="note">
+      <strong>Most effective approach:</strong> A clear, complete source-of-funds package submitted promptly through official dispute channels produces far better outcomes than arguing about the protocol's decentralised nature or the legitimacy of privacy. Compliance teams respond to evidence, not philosophy.
+    </div>
+  </section>
+
+  <section class="card" id="tools">
+    <h2>Analytics Tools Detecting Tornado Cash Interactions</h2>
+
+    <table aria-label="Analytics tools for Tornado Cash detection">
+      <thead>
+        <tr><th>Provider</th><th>TC smart contract coverage</th><th>OFAC layer</th><th>Multi-chain</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight">
+          <td><strong>Chainalysis KYT</strong></td>
+          <td class="ok">Comprehensive — all TC pools, all chains</td>
+          <td class="ok">Full OFAC SDN integration</td>
+          <td class="ok">ETH, BNB, Polygon, Arbitrum+</td>
+        </tr>
+        <tr>
+          <td><strong>Elliptic Navigator</strong></td>
+          <td class="ok">Comprehensive — DeFi protocol focus</td>
+          <td class="ok">OFAC + EU sanctions</td>
+          <td class="ok">ETH + major EVM chains</td>
+        </tr>
+        <tr class="highlight">
+          <td><strong>TRM Labs</strong></td>
+          <td class="ok">Good — 30+ chain coverage</td>
+          <td class="ok">Global sanctions lists</td>
+          <td class="ok">Widest chain coverage</td>
+        </tr>
+        <tr>
+          <td><strong>Crystal Blockchain</strong></td>
+          <td class="warn">Good on ETH; limited on newer EVM chains</td>
+          <td class="ok">OFAC + EU</td>
+          <td class="warn">ETH-primary</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      All major providers flag Tornado Cash interactions immediately as high-risk. For OFAC-adjacent decisions, Chainalysis and Elliptic have the strongest law enforcement relationships and have had their data accepted in US federal proceedings. Methodology references: <a href="https://www.chainalysis.com/reports/crypto-crime-report/" target="_blank" rel="noopener nofollow">Chainalysis</a> · <a href="https://www.elliptic.co/resources" target="_blank" rel="noopener nofollow">Elliptic</a>.
+    </div>
+  </section>
+
+  <section class="card" id="legal">
+    <h2>Tornado Cash Legal Cases and Regulatory Context</h2>
+    <ul>
+      <li><strong>OFAC SDN designation (August 8, 2022):</strong> Treasury sanctioned Tornado Cash's smart contract addresses, citing their use by Lazarus Group and other sanctioned entities to launder hundreds of millions. This was the first time OFAC sanctioned immutable software code rather than a person or organisation.</li>
+      <li><strong>Pertsev prosecution (Netherlands):</strong> Alexey Pertsev, one of Tornado Cash's developers, was arrested in August 2022 and convicted in May 2024 on money laundering charges by a Dutch court — sentenced to 5 years and 4 months. This established personal liability for mixer developers in EU jurisdictions.</li>
+      <li><strong>Storm and Semenov indictment (US, 2023):</strong> Roman Storm and Roman Semenov were indicted in the US on charges of conspiracy to commit money laundering, sanctions violations, and operating an unlicensed money transmitting business. Prosecution is ongoing. FinCEN guidance at <a href="https://www.fincen.gov/resources/statutes-regulations/guidance/application-fincens-regulations-certain-business-models" target="_blank" rel="noopener nofollow">fincen.gov</a>.</li>
+      <li><strong>5th Circuit ruling (November 2024):</strong> The US Court of Appeals for the 5th Circuit ruled that immutable smart contracts — software that no party can modify or control — cannot be sanctioned as "property" under IEEPA. This ruling created significant uncertainty about the legal basis of the OFAC designation. The case is expected to continue toward the Supreme Court.</li>
+      <li><strong>FATF guidance:</strong> FATF's 2021 virtual asset guidance classifies mixer usage as a high-risk indicator for all VASPs globally, independent of any specific sanctions designation. See <a href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Guidance-RBA-virtual-assets-2021.html" target="_blank" rel="noopener nofollow">fatf-gafi.org</a>.</li>
+    </ul>
+
+    <div class="note warn">
+      <strong>Compliance implications of the 5th Circuit ruling:</strong> The ruling does not remove Tornado Cash from the OFAC SDN list — that requires a formal OFAC delisting action. Until and unless the contracts are formally delisted, US-nexus VASPs should continue to treat interactions as potentially sanctionable. The ruling affects the legal theory of the sanction; it does not change compliance obligations until the SDN list is officially updated.
+    </div>
+  </section>
+
+  <section class="card" id="best-practices">
+    <h2>Best Practices for Compliance Teams Handling Tornado Cash</h2>
+    <ul>
+      <li><strong>Separate OFAC and AML workflows entirely.</strong> Tornado Cash OFAC exposure requires a sanctions compliance response — not an AML risk-scoring response. These must be documented and handled through different policy tracks with different escalation paths.</li>
+      <li><strong>Configure date-aware screening.</strong> Your AML bot should flag whether a Tornado Cash interaction is pre- or post-August 8, 2022. The compliance response differs fundamentally. Most analytics APIs return interaction timestamps — parse and use them.</li>
+      <li><strong>Brief legal counsel on the 5th Circuit ruling.</strong> The evolving legal status of the OFAC sanction creates uncertainty that requires legal guidance specific to your jurisdiction and US-nexus exposure. Do not navigate this solely through compliance policy.</li>
+      <li><strong>Document source-of-funds requests thoroughly.</strong> When requesting documentation from users with Tornado Cash exposure, specify exactly what evidence is required. Vague requests generate vague responses — ask specifically for the relevant exchange withdrawal records or bank statements covering the period of the flagged transaction.</li>
+      <li><strong>Train compliance staff on the pre/post designation distinction.</strong> Front-line compliance teams regularly misapply OFAC procedures to pre-2022 Tornado Cash interactions that are standard high-risk AML situations. This over-restriction damages legitimate users unnecessarily.</li>
+    </ul>
+
+    <div class="note">
+      <strong>Most important principle:</strong> Tornado Cash creates two distinct compliance problems that require different tools: an OFAC sanctions compliance problem (for post-Aug 2022 interactions with sanctioned addresses) and an AML monitoring problem (for the broader privacy and obfuscation risk). Conflating them produces either over-restriction or under-compliance.
+    </div>
+  </section>
+
+  <section class="card" id="troubleshooting">
+    <h2>Troubleshooting Tornado Cash AML Flag Disputes</h2>
+
+    <h3>"Flagged for Tornado Cash use but transaction predates OFAC sanction"</h3>
+    <ul>
+      <li>Confirm the interaction date with the analytics report. Pre-August 8, 2022 interactions are not OFAC violations — they are high-risk AML exposure. Request the platform distinguish between its OFAC block and its AML hold — these require different responses and the user has different rights in each case.</li>
+    </ul>
+
+    <h3>"Wallet flagged for Tornado Cash exposure but never directly interacted"</h3>
+    <ul>
+      <li>Indirect exposure is possible if you received funds from a wallet that withdrew from Tornado Cash. Request the hop distance from the analytics report. At 2+ hops, the exposure weight is substantially lower. Gather documentation showing your funds' legitimate origin and submit a formal dispute with the hop distance evidence.</li>
+    </ul>
+
+    <h3>"Platform won't release funds despite providing documentation"</h3>
+    <ul>
+      <li>If the interaction is post-August 2022 with a US-nexus platform, documentation does not resolve an OFAC obligation — the platform has no legal discretion. Your recourse is through OFAC's Licensing Division (for a specific licence to access the funds) or through legal counsel seeking a declaratory ruling. This is a legal process, not a compliance dispute process.</li>
+    </ul>
+
+    <div class="note">
+      <strong>Key distinction to make in any dispute:</strong> Is this block based on AML risk scoring (where EDD and documentation can resolve it) or an OFAC sanctions obligation (where only OFAC licensing or legal process can resolve it)? Request this clarification in writing from the platform at the outset — it determines the entire resolution strategy.
+    </div>
+  </section>
+
+  <section class="eeat" id="eeat" aria-labelledby="eeat-title">
+    <h2 id="eeat-title">Tornado Cash: Sources &amp; Authoritative References</h2>
+
+    <div class="grid-2">
+      <div>
+        <h3>Regulatory &amp; legal</h3>
+        <ul>
+          <li><a href="https://ofac.treasury.gov/sanctions-programs-and-country-information" target="_blank" rel="noopener nofollow">OFAC — SDN List including Tornado Cash designations</a></li>
+          <li><a href="https://www.fincen.gov/resources/statutes-regulations/guidance/application-fincens-regulations-certain-business-models" target="_blank" rel="noopener nofollow">FinCEN — Virtual Currency Mixer Guidance</a></li>
+          <li><a href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Guidance-RBA-virtual-assets-2021.html" target="_blank" rel="noopener nofollow">FATF — Risk-Based Approach: Anonymity-Enhancing Technologies</a></li>
+          <li><a href="https://bsaefiling.fincen.treas.gov/" target="_blank" rel="noopener nofollow">FinCEN BSA E-Filing — SAR Submission Portal</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/Cryptocurrency_tumbler" target="_blank" rel="noopener nofollow">Wikipedia — Cryptocurrency Tumbler (technical reference)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Analytics &amp; research</h3>
+        <ul>
+          <li><a href="https://www.chainalysis.com/reports/crypto-crime-report/" target="_blank" rel="noopener nofollow">Chainalysis — 2024 Crypto Crime Report (Tornado Cash data)</a></li>
+          <li><a href="https://www.elliptic.co/resources" target="_blank" rel="noopener nofollow">Elliptic — DeFi Mixer Typologies &amp; Detection</a></li>
+          <li><a href="https://www.trmlabs.com/blog" target="_blank" rel="noopener nofollow">TRM Labs — Blockchain Intelligence: Tornado Cash</a></li>
+          <li><a href="https://crystalblockchain.com/resources/" target="_blank" rel="noopener nofollow">Crystal Blockchain — Compliance Resources</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:1rem;">
+      <strong>About:</strong> Prepared by Crypto Finance Experts. Covers Tornado Cash protocol mechanics, OFAC sanction timeline, zk-SNARK privacy technology, AML risk scoring, VASP compliance obligations, user guidance, legal cases, and troubleshooting. Updated <time datetime="2026-03-18">March 18, 2026</time>. Not legal advice.
+    </div>
+  </section>
+
+  <section class="card faq-section" aria-labelledby="faq">
+    <h2 id="faq">Tornado Cash: Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <button class="faq-button" aria-expanded="false" aria-controls="f1" id="b1">
+        <h3>What is Tornado Cash?</h3><span class="faq-plus">+</span>
+      </button>
+      <div id="f1" class="faq-content" role="region" aria-labelledby="b1">
+        <p>Tornado Cash is a decentralised, non-custodial cryptocurrency mixing protocol deployed on Ethereum and several EVM-compatible chains in 2019. It uses smart contracts and zero-knowledge proofs (zk-SNARKs) to break the on-chain link between deposit and withdrawal addresses. Users deposit a fixed denomination of ETH or ERC-20 tokens, receive a cryptographic note, and can later redeem that note to withdraw the same amount to a completely different address — with no on-chain connection between the two.</p>
+        <p>In August 2022, the US Treasury's OFAC added Tornado Cash's smart contract addresses to the SDN list, making interaction with the protocol a potential sanctions violation for US persons and US-nexus entities. The protocol itself remains deployed on-chain — immutable code that cannot be removed — but its use carries significant legal and compliance risk globally.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-button" aria-expanded="false" aria-controls="f2" id="b2">
+        <h3>Is Tornado Cash illegal?</h3><span class="faq-plus">+</span>
+      </button>
+      <div id="f2" class="faq-content" role="region" aria-labelledby="b2">
+        <p>The answer depends on jurisdiction and timing. Tornado Cash itself is decentralised software — the smart contracts are on-chain and cannot be shut down. Using the protocol is not universally illegal. For US persons and entities with US nexus, interacting with the OFAC-designated smart contract addresses after August 8, 2022 may constitute a sanctions violation regardless of intent — this is a strict liability standard where the nature of the transaction matters, not the user's motivation.</p>
+        <p>Outside the US, legality depends on local sanctions legislation. The 5th Circuit Court of Appeals ruled in November 2024 that immutable smart contracts may not be sanctionable as "property" under IEEPA — creating ongoing legal uncertainty about the US designation. However, in all jurisdictions, using Tornado Cash to launder criminal proceeds is a criminal offense under money laundering statutes. And in all jurisdictions, VASPs must treat Tornado Cash interactions as high-risk AML exposure per FATF guidance regardless of the sanctions question.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-button" aria-expanded="false" aria-controls="f3" id="b3">
+        <h3>Why is Tornado Cash flagged in AML screening?</h3><span class="faq-plus">+</span>
+      </button>
+      <div id="f3" class="faq-content" role="region" aria-labelledby="b3">
+        <p>Tornado Cash is flagged in AML screening for two distinct reasons that compliance teams must separate. First, it is a cryptocurrency mixer that deliberately obfuscates transaction provenance — a recognised money laundering red flag under FATF guidance regardless of whether a sanctions designation exists. FATF's virtual asset guidance explicitly cites anonymity-enhancing technologies as risk indicators requiring enhanced due diligence.</p>
+        <p>Second, post-August 8, 2022 interactions with Tornado Cash contract addresses trigger an OFAC sanctions flag — a legal compliance obligation separate from AML risk scoring. This OFAC overlay applies regardless of hop distance, volume, or any EDD outcome. Analytics tools flag both simultaneously, but compliance teams should handle them through separate policy tracks: AML risk scoring (where EDD and documentation can resolve the matter) and OFAC sanctions compliance (where only OFAC licensing or legal process can).</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-button" aria-expanded="false" aria-controls="f4" id="b4">
+        <h3>My wallet was flagged for Tornado Cash use — what do I do?</h3><span class="faq-plus">+</span>
+      </button>
+      <div id="f4" class="faq-content" role="region" aria-labelledby="b4">
+        <p>The first step is determining whether the exposure is pre- or post-August 8, 2022. Request the specific interaction date from the platform — this determines which compliance pathway applies. Pre-designation exposure is an AML matter where documentation and EDD can resolve the flag. Post-designation exposure at a US-nexus platform is an OFAC matter where the platform has no legal discretion and documentation alone will not release funds.</p>
+        <p>For AML-only flags (pre-2022 or non-OFAC exposure): gather source-of-funds documentation showing where the funds came from before they entered Tornado Cash. Exchange withdrawal records, bank statements, and OTC desk receipts are all relevant. Submit these through the platform's official compliance dispute channel. For OFAC-flagged exposure: consult a cryptocurrency compliance attorney experienced in OFAC licensing and sanctions matters before taking further action — this is a legal process requiring specialist guidance, not a standard compliance dispute.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-button" aria-expanded="false" aria-controls="f5" id="b5">
+        <h3>What was the OFAC Tornado Cash sanction and why was it controversial?</h3><span class="faq-plus">+</span>
+      </button>
+      <div id="f5" class="faq-content" role="region" aria-labelledby="b5">
+        <p>On August 8, 2022, the US Treasury's OFAC added Tornado Cash's smart contract addresses to the Specially Designated Nationals (SDN) list, citing their use by North Korean state-sponsored hackers (Lazarus Group) and other criminal actors to launder hundreds of millions of dollars. This was the first time OFAC sanctioned immutable software code rather than a person or organisation — creating a legally novel situation.</p>
+        <p>The controversy stems from the nature of the target. Tornado Cash smart contracts are immutable code on a public blockchain — no person or company controls them, and they cannot be turned off. Critics argued that sanctioning code rather than operators criminalises privacy-preserving software and could be used to restrict legitimate financial privacy. The 5th Circuit Court of Appeals agreed in part in November 2024, ruling that immutable contracts cannot be sanctioned as "property" under IEEPA — though the broader sanction and criminal prosecutions of the developers continue.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-button" aria-expanded="false" aria-controls="f6" id="b6">
+        <h3>How does Tornado Cash use zero-knowledge proofs?</h3><span class="faq-plus">+</span>
+      </button>
+      <div id="f6" class="faq-content" role="region" aria-labelledby="b6">
+        <p>Tornado Cash uses zk-SNARKs (Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge) to allow users to prove they possess a valid deposit note without revealing which specific deposit it corresponds to. When a user deposits ETH into a Tornado Cash pool, the smart contract records a cryptographic commitment on-chain. The user receives a secret "note" off-chain. To withdraw, the user generates a zk-SNARK proof that they possess a valid note — without revealing the note itself or any link to the original deposit.</p>
+        <p>The smart contract verifies the proof mathematically and releases the funds to any withdrawal address the user specifies. The result is a cryptographically verifiable unlinkability — not just operational obfuscation as in traditional mixers. This is why analytics tools cannot follow the fund flow through Tornado Cash the way they can through standard on-chain transactions: there is genuinely no on-chain link to follow. Detection instead relies on flagging interactions with the known contract addresses directly.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-button" aria-expanded="false" aria-controls="f7" id="b7">
+        <h3>What happened to the Tornado Cash developers?</h3><span class="faq-plus">+</span>
+      </button>
+      <div id="f7" class="faq-content" role="region" aria-labelledby="b7">
+        <p>Three developers were identified and prosecuted. Alexey Pertsev was arrested in the Netherlands in August 2022. In May 2024, a Dutch court convicted him of money laundering and sentenced him to 5 years and 4 months in prison — establishing that developers of mixing services can face personal criminal liability in EU jurisdictions. Roman Storm and Roman Semenov were indicted in the US in August 2023 on charges of conspiracy to commit money laundering, violations of US sanctions law, and operating an unlicensed money transmitting business. Roman Semenov remains at large; Roman Storm's trial was ongoing as of early 2026.</p>
+        <p>These prosecutions represent the current regulatory position: developers of services that facilitate money laundering face personal liability regardless of whether the service is decentralised. The decentralised nature of the protocol is a relevant factor in the legal arguments but has not prevented prosecution of those who created and promoted it.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-button" aria-expanded="false" aria-controls="f8" id="b8">
+        <h3>Does Tornado Cash exposure affect all ERC-20 tokens or just ETH?</h3><span class="faq-plus">+</span>
+      </button>
+      <div id="f8" class="faq-content" role="region" aria-labelledby="b8">
+        <p>Tornado Cash supported both ETH and several ERC-20 tokens — including DAI, USDC, USDT, and WBTC in fixed-denomination pools. Exposure flags from analytics tools cover all assets processed through the Tornado Cash pools, not just ETH. When OFAC sanctioned Tornado Cash, Circle (USDC issuer) immediately froze all USDC held in Tornado Cash smart contracts — demonstrating how quickly stablecoin issuers responded to the designation.</p>
+        <p>The OFAC SDN designation covers the smart contract addresses themselves regardless of what asset flows through them. Any interaction with those addresses — depositing ETH, USDC, DAI, or any other token — falls under the sanction. Analytics tools flag all such interactions with the same high-risk / OFAC-exposure designation, regardless of the specific token involved.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-button" aria-expanded="false" aria-controls="f9" id="b9">
+        <h3>What does the 5th Circuit ruling mean for Tornado Cash compliance?</h3><span class="faq-plus">+</span>
+      </button>
+      <div id="f9" class="faq-content" role="region" aria-labelledby="b9">
+        <p>In November 2024, the US Court of Appeals for the 5th Circuit ruled that OFAC's designation of Tornado Cash's immutable smart contracts was unlawful under IEEPA because immutable code that no party can modify or control does not constitute "property" that can be blocked. The court found the immutable contracts — unlike mutable contracts or organisations — cannot be owned or controlled and therefore fall outside IEEPA's sanctionable categories.</p>
+        <p>From a compliance standpoint, the ruling does not remove Tornado Cash from the OFAC SDN list — only OFAC itself can delist the addresses, and no delisting had occurred as of March 2026. US-nexus VASPs should continue to treat Tornado Cash interactions as potentially sanctionable until a formal OFAC delisting action occurs. The ruling is significant legal precedent that may eventually result in delisting, but compliance obligations follow the SDN list, not court opinions. Consult your cryptocurrency compliance attorney for current guidance on how your specific institution should respond given your US-nexus exposure.</p>
+      </div>
+    </div>
+
+  </section>
+
+</article>
+</main>
+
+<footer class="container" role="contentinfo" style="padding:2rem 0;border-top:1px solid var(--line);margin-top:2rem">
+  <p class="muted">© 2026 Tornado Cash Compliance Guide. Educational content with compliance-first operational focus. Not legal advice. <time datetime="2026-03-18">March 18, 2026</time>.</p>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      const body = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.setAttribute('aria-expanded', String(!open));
+      btn.querySelector('.faq-plus').textContent = open ? '+' : '−';
+      body.style.maxHeight = open ? '0' : body.scrollHeight + 'px';
+      body.classList.toggle('open', !open);
+    });
+  });
+</script>
+
+</body>
+</html>
